@@ -45,7 +45,7 @@ const sp = {
           midichan: midichan,
         };
       }
-    ).midi(MIDI_DEVICE).log();
+    ).midi(MIDI_DEVICE);
   },
 };
 
