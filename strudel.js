@@ -1,3 +1,5 @@
+const MIDI_DEVICE = 'UM-ONE MIDI 1';
+
 const e2 = {
   oscillator: {
     pitch: 80,
@@ -26,16 +28,43 @@ const e2 = {
     x: 102,
     y: 103,
   },
-  inscribe: function(pattern, part) {
-    return pattern.midichan(part).midi();
+  inscribe: function(part, pattern) {
+    return pattern.note().midichan(part).midi(MIDI_DEVICE);
   },
-  // TODO: register e2.insribe to pattern api
 };
 
-function sp(pattern) {
-  // TODO: substitute strings identifying bank / pad for midi notes and midi channel
-  return pattern.midi();
+const sp = {
+  inscribe: function(bank, pattern) {
+    return pattern.withValue(
+      v => {
+        const n_bank = 'ABCDEFGHIJ'.indexOf(bank.toUpperCase());
+        const midichan = 1 + Math.floor(n_bank / 5);
+        const note = 46 + v + (12 * (n_bank % 5));
+        return {
+          note: note,
+          midichan: midichan,
+        };
+      }
+    ).midi(MIDI_DEVICE).log();
+  },
 };
 
-"A12 A11".velocity("0 0.5 1").sp()
-"c2 d2".ccn(e2.filter.cutoff).ccv("0 0.5 1").e2(3)
+function cc(n, v, pattern) {
+  return pattern.ccn(n).ccv(v / 127);
+};
+
+function init() {
+  register('e2', e2.inscribe);
+  register('sp', sp.inscribe);
+  register('cc', cc);
+};
+
+init();
+
+stack(
+  //"".e2(1), // reserved for SP
+  //"".e2(2), // reserved for SP
+  
+  //"".e2(3),
+  //"".sp('A'),
+)
