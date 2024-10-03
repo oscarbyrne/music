@@ -90,7 +90,10 @@ stack(
   "< ~ 10>".late(0.5002).slow(2).sp('F'),
   "6".slow(8).sp('F'),
   "b4@2 <~!3 [c#4 ~ [c#4]!4 ~]>".slow(4).cc(e2.modulation.depth, "85 106".slow(32)).e2(6),
-  "bb5".slow(8).e2(7),
+  "bb5".slow(8)
+    .cc(e2.filter.cutoff, sine.range(90, 100).slow(16))
+    .cc(e2.oscillator.edit, cosine.range(80, 110).slow(32))
+    .e2(7),
   "5 5 5 6 6 ~".slow(4).late(1/3).sp('G'),
   // "<~ ~ [9@3 ~@1] ~>".slow(8).sp('G'),
   "10@15 ~".slow(4).sp('G'),
